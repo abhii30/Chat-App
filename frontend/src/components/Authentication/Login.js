@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   FormControl,
@@ -25,6 +25,7 @@ const Login = () => {
         <Input
           placeholder="Enter your Email"
           onChange={(e) => setEmail(e.target.value)}
+          value={email}
         />
       </FormControl>
       <FormControl id="password" isRequired>
@@ -34,6 +35,7 @@ const Login = () => {
             type={show ? "text" : "password"}
             placeholder="Enter Password"
             onChange={(e) => setPassword(e.target.value)}
+            value={password}
           />
           <InputRightElement>
             <Button onClick={handlePassword} bg={"transparent"} p={"12px"}>
@@ -54,6 +56,18 @@ const Login = () => {
         onClick={handleSubmit}
       >
         Login
+      </Button>
+      <Button
+        colorScheme="green"
+        width="full"
+        mt={4}
+        onClick={() => {
+          setEmail("akumar300599@gmail.com");
+          setPassword("12345678");
+          console.log(email, password);
+        }}
+      >
+        Get Credentials
       </Button>
     </VStack>
   );
