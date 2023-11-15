@@ -8,7 +8,6 @@ const userSchema = mongoose.Schema(
     },
     email: {
       type: String,
-      trim: true,
       required: true,
       unique: true,
     },
@@ -18,7 +17,6 @@ const userSchema = mongoose.Schema(
     },
     pic: {
       type: String,
-      required: true,
       default: "https://img.icons8.com/color/48/user.png",
     },
   },
