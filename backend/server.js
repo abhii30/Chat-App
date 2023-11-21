@@ -4,13 +4,16 @@ const { chats } = require("./data.js/data");
 const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
 const colors = require("colors");
+const { notFound } = require("./middlewares/errorHandlers");
 
 dotenv.config();
 connectDB();
 const app = express();
 
 //middleware
+// app.use(notFound);
 app.use(express.json());
+// app.user(errorHandler);
 
 // app.get("/", (req, res) => {
 //   res.send("Hello World!");

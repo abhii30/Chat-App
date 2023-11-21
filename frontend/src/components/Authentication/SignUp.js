@@ -7,6 +7,7 @@ import {
   InputGroup,
   InputRightElement,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 import OpenEye from "../../assets/open-eye.png";
 import CloseEye from "../../assets/closed-eye.png";
@@ -14,17 +15,83 @@ import CloseEye from "../../assets/closed-eye.png";
 const SignUp = () => {
   const [showP, setShowP] = useState(false);
   const [showCP, setShowCP] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [name, setName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState();
   const [pic, setPic] = useState();
+  const toast = useToast();
 
   const handlePassword = () => setShowP(!showP);
   const handleConfirmPassword = () => setShowCP(!showCP);
 
-  const postImage = (pic) => {};
-  const handleSubmit = () => {};
+  const postImage = (pic) => {
+    setLoading(true);
+    if (pic === undefined) {
+      toast({
+        title: "Please select an image",
+        description: "Please select an image",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
+    if (pic.type === "image/jpeg" || pic.type === "image/png") {
+      const data = new FormData();
+      data.append("file", pic);
+      data.append("upload_preset", "chat-app");
+      data.append("cloud_name", "dmwoknpni");
+      fetch("https://api.cloudinary.com/v1_1/dmwoknpni/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          setPic(data.url.toString());
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+        });
+    } else {
+      toast({
+        title: "Please select an image",
+        description: "Please select an image",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+      setLoading(false);
+    }
+  };
+  const handleSubmit = async () => {
+    setLoading(true);
+    if (!name || !email || !password || !confirmPassword) {
+      toast({
+        title: "Please fill all the fields",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+      return;
+    }
+    if (password !== confirmPassword) {
+      toast({
+        title: "Passwords do not match",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      return;
+    }
+  };
 
   return (
     <VStack spacing={"5px"} color={"black"}>
@@ -99,6 +166,7 @@ const SignUp = () => {
         width="full"
         mt={4}
         onClick={handleSubmit}
+        isLoading={loading}
       >
         Sign Up
       </Button>
