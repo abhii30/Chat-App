@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   FormControl,
@@ -22,6 +24,7 @@ const SignUp = () => {
   const [confirmPassword, setConfirmPassword] = useState();
   const [pic, setPic] = useState();
   const toast = useToast();
+  const history = useNavigate();
 
   const handlePassword = () => setShowP(!showP);
   const handleConfirmPassword = () => setShowCP(!showCP);
@@ -91,6 +94,38 @@ const SignUp = () => {
       });
       return;
     }
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const { data } = await axios.post(
+        "/api/user",
+        { name, email, password, pic },
+        config
+      );
+      toast({
+        title: "User Registered",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      localStorage.setItem("userInfo", JSON.stringify(data));
+      setLoading(false);
+      history.push("/chats");
+    } catch (error) {
+      toast({
+        title: "Error Occured",
+        description: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+    }
   };
 
   return (
@@ -118,7 +153,12 @@ const SignUp = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <InputRightElement>
-            <Button onClick={handlePassword} bg={"transparent"} p={"12px"}>
+            <Button
+              onClick={handlePassword}
+              bg={"transparent"}
+              p={"12px"}
+              _hover={{ bg: "transparent" }}
+            >
               {showP ? (
                 <img src={CloseEye} alt="Close Eye" />
               ) : (
@@ -141,6 +181,7 @@ const SignUp = () => {
               onClick={handleConfirmPassword}
               bg={"transparent"}
               p={"12px"}
+              _hover={{ bg: "transparent" }}
             >
               {showCP ? (
                 <img src={CloseEye} alt="Close Eye" />

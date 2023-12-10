@@ -20,7 +20,7 @@ const Login = () => {
   const handleSubmit = () => {};
   return (
     <VStack spacing={"5px"}>
-      <FormControl id="email" isRequired>
+      <FormControl id="loginEmail" isRequired>
         <FormLabel>Email</FormLabel>
         <Input
           placeholder="Enter your Email"
@@ -28,7 +28,7 @@ const Login = () => {
           value={email}
         />
       </FormControl>
-      <FormControl id="password" isRequired>
+      <FormControl id="loginPassword" isRequired>
         <FormLabel>Password</FormLabel>
         <InputGroup>
           <Input
@@ -38,7 +38,12 @@ const Login = () => {
             value={password}
           />
           <InputRightElement>
-            <Button onClick={handlePassword} bg={"transparent"} p={"12px"}>
+            <Button
+              onClick={handlePassword}
+              bg={"transparent"}
+              p={"12px"}
+              _hover={{ bg: "transparent" }}
+            >
               {show ? (
                 <img src={CloseEye} alt="Close Eye" />
               ) : (
